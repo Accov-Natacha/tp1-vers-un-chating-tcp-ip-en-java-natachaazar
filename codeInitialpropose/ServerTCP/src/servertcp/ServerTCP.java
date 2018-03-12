@@ -41,26 +41,42 @@ public class ServerTCP {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) throws IOException {
-        //Créer une écoute sur le port 2000
-        ServerSocket l = new ServerSocket(2000);
-        System.out.println(l.getLocalSocketAddress());
-        while (true) {
-            //try-with-resource
-            try (Socket serviceSocket = l.accept()) {
-                //Acceper un client l.accept()
-                System.out.println(serviceSocket.getRemoteSocketAddress());
-                BufferedReader ir = getInput(serviceSocket);
-                PrintWriter reply = getoutput(serviceSocket);
-                String line;                
-                while ((line = ir.readLine()) != null) {                  
-                    System.out.printf("je répond ping %s\n", line);
-                    reply.printf("je répond ping %s\n", line);
-                    reply.flush();
-                }
-                //clore la socket (réalisé par try-with resource
-            }
-        }
+//    public static void main(String[] args) throws IOException {
+//        //Créer une écoute sur le port 2000
+//        ServerSocket l = new ServerSocket(2000);
+//        System.out.println(l.getLocalSocketAddress());
+//        while (true) {
+//            //try-with-resource
+//            try (Socket serviceSocket = l.accept()) {
+//                //Acceper un client l.accept()
+//                System.out.println(serviceSocket.getRemoteSocketAddress());
+//                BufferedReader ir = getInput(serviceSocket);
+//                PrintWriter reply = getoutput(serviceSocket);
+//                String line;                
+//                while ((line = ir.readLine()) != null) {                  
+//                    System.out.printf("je répond ping %s\n", line);
+//                    reply.printf("je répond ping %s\n", line);
+//                    reply.flush();
+//                }
+//                //clore la socket (réalisé par try-with resource
+//            }
+//        }
+//    }
+    
+    public static void main (String[] args) {
+    try {
+      ServerSocket server = new ServerSocket(2000);
+      System.out.println("ADDRESSSSS" + server.getLocalSocketAddress());
+      while (true) {
+        Socket client = server.accept();
+        System.out.println("CLIENT "+client.getRemoteSocketAddress());
+        EchoHandler handler = new EchoHandler(client);
+        handler.start();
+      }
     }
+    catch (Exception e) {
+      System.err.println("Exception caught:" + e);
+    }
+  }
 
 }
