@@ -66,11 +66,12 @@ public class ServerTCP {
     public static void main (String[] args) {
     try {
       ServerSocket server = new ServerSocket(2000);
+      GestionListeClients listeClient = new GestionListeClients();
       System.out.println("ADDRESSSSS" + server.getLocalSocketAddress());
       while (true) {
         Socket client = server.accept();
         System.out.println("CLIENT "+client.getRemoteSocketAddress());
-        EchoHandler handler = new EchoHandler(client);
+        EchoHandler handler = new EchoHandler(client,listeClient);
         handler.start();
       }
     }
